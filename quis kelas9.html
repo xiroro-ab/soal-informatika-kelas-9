@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ulangan Harian Bab 1 - Berpikir Komputasional</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .name-entry-container, .quiz-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Styling untuk Form Nama */
+        .name-entry-container {
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .name-entry-container h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        #student-name {
+            width: 80%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        #start-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Menyembunyikan kuis di awal */
+        #quiz-wrapper {
+            display: none;
+        }
+
+        /* Styling Kuis yang sudah ada */
+        .header {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #display-name {
+            font-weight: 400;
+            font-size: 0.9em;
+        }
+
+        .header h1 { margin: 0; font-size: 1.2em; }
+        #progress { font-size: 1em; font-weight: 600; }
+        .main-content { padding: 25px; }
+        #question-text { font-size: 1.1em; font-weight: 600; margin-bottom: 20px; line-height: 1.5; }
+        .options-container { display: flex; flex-direction: column; gap: 10px; }
+        .option { display: block; width: 100%; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; text-align: left; font-size: 1em; background-color: #f9f9f9; transition: all 0.2s ease; }
+        .option:hover:not(:disabled) { background-color: #e9eff5; border-color: #4a90e2; }
+        .option:disabled { cursor: not-allowed; }
+        .correct { background-color: #d4edda; border-color: #28a745; color: #155724; font-weight: 600; }
+        .incorrect { background-color: #f8d7da; border-color: #dc3545; color: #721c24; font-weight: 600; }
+        #feedback { margin-top: 15px; padding: 10px; border-radius: 5px; font-size: 0.9em; display: none; }
+        #feedback.correct-feedback { background-color: #e2f0d9; color: #385723; }
+        #feedback.incorrect-feedback { background-color: #fde2e4; color: #721c24; }
+        .footer { padding: 20px 25px; border-top: 1px solid #eee; text-align: right; }
+        #next-btn { background-color: #4a90e2; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; visibility: hidden; }
+        #next-btn:hover { background-color: #357abd; }
+        .score-container { text-align: center; }
+        .score-container h2 { font-size: 2em; color: #4a90e2; }
+        .score-container p { font-size: 1.2em; }
+        #restart-btn { background-color: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 600; cursor: pointer; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="name-entry-container" id="name-entry">
+            <h2>Selamat Datang di Ulangan Harian Bab 1</h2>
+            <p>Silakan masukkan nama lengkap Anda untuk memulai.</p>
+            <input type="text" id="student-name" placeholder="Ketik nama Anda di sini...">
+            <button id="start-btn">Mulai Kuis</button>
+        </div>
+
+        <div id="quiz-wrapper">
+            <div class="quiz-container">
+                <div class="header">
+                    <div>
+                        <h1>Ulangan Harian Bab 1</h1>
+                        <div id="display-name">Siswa</div>
+                    </div>
+                    <div id="progress">Soal 1/10</div>
+                </div>
+                <div class="main-content" id="quiz-area">
+                    <p id="question-text">Memuat pertanyaan...</p>
+                    <div class="options-container" id="options-container"></div>
+                    <div id="feedback"></div>
+                </div>
+                <div class="footer">
+                    <button id="next-btn">Berikutnya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ... (Kode JavaScript untuk logika kuis tetap sama) ...
+        const quizData = [
+            { question: "Dalam struktur data, kumpulan titik-titik (nodes) yang dihubungkan oleh garis-garis (edges) disebut sebagai...", options: ["Tree", "Graf", "Array", "List"], answer: "Graf", rationale: "Ini adalah definisi dasar dari sebuah Graf." },
+            { question: "Struktur data yang menggambarkan hubungan hierarkis, seperti silsilah keluarga, adalah contoh dari...", options: ["Graf", "Linked List", "Tree", "Stack"], answer: "Tree", rationale: "Tree digunakan untuk data hierarkis." },
+            { question: "Dalam struktur data Tree, node yang tidak memiliki 'anak' disebut...", options: ["Root (Akar)", "Parent (Induk)", "Branch (Cabang)", "Leaf (Daun)"], answer: "Leaf (Daun)", rationale: "Leaf adalah node di ujung cabang." },
+            { question: "Syarat: \"Membawa kartu pelajar DAN memakai seragam.\" Jika Budi hanya memakai seragam, apa hasilnya?", options: ["Boleh masuk", "Tidak boleh masuk", "Boleh masuk jika diizinkan", "Informasi tidak cukup"], answer: "Tidak boleh masuk", rationale: "Logika AND mengharuskan semua kondisi benar." },
+            { question: "Peta jaringan kereta api paling tepat direpresentasikan dengan struktur data...", options: ["Graf", "Tree", "Array", "Queue"], answer: "Graf", rationale: "Graf cocok untuk jaringan non-hierarkis." },
+            { question: "Ciri khas utama dari struktur data Tree adalah...", options: ["Memiliki banyak siklus", "Setiap node bisa punya banyak 'induk'", "Punya simpul awal", "Tidak memiliki siklus (jalur melingkar)"], answer: "Tidak memiliki siklus (jalur melingkar)", rationale: "Tree adalah graf tanpa siklus." },
+            { question: "Ekspresi: \"(Hari Minggu) AND (Libur sekolah)\". Agar bernilai BENAR, maka...", options: ["Cukup hari Minggu.", "Harus hari Minggu DAN libur sekolah.", "Cukup libur sekolah.", "Salah satu saja cukup."], answer: "Harus hari Minggu DAN libur sekolah.", rationale: "Logika AND mengharuskan kedua kondisi terpenuhi." },
+            { question: "Pertemanan di media sosial paling sesuai direpresentasikan sebagai...", options: ["Tree", "Graf", "Stack", "Array"], answer: "Graf", rationale: "Jaringan sosial adalah contoh klasik dari Graf." },
+            { question: "Sistem login memeriksa: \"(Username benar) AND (Password benar)\". Jika username salah tapi password benar, apa yang terjadi?", options: ["Login berhasil", "Login gagal", "Minta username lagi", "Sistem terkunci"], answer: "Login gagal", rationale: "Satu kondisi salah membuat hasil AND menjadi salah." },
+            { question: "Node paling atas dalam sebuah struktur data Tree disebut...", options: ["Leaf (Daun)", "Child (Anak)", "Root (Akar)", "Edge (Sisi)"], answer: "Root (Akar)", rationale: "Root adalah titik awal atau puncak dari Tree." }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let studentName = "";
+
+        // Elemen dari Form Nama
+        const nameEntryContainer = document.getElementById('name-entry');
+        const studentNameInput = document.getElementById('student-name');
+        const startBtn = document.getElementById('start-btn');
+        const quizWrapper = document.getElementById('quiz-wrapper');
+        
+        // Elemen dari Kuis
+        const displayName = document.getElementById('display-name');
+        const progressText = document.getElementById('progress');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackText = document.getElementById('feedback');
+        const nextBtn = document.getElementById('next-btn');
+        const quizArea = document.getElementById('quiz-area');
+        const footer = document.querySelector('.footer');
+        
+        startBtn.addEventListener('click', () => {
+            studentName = studentNameInput.value.trim();
+            if (studentName === "") {
+                alert("Harap masukkan nama Anda!");
+                return;
+            }
+            nameEntryContainer.style.display = 'none';
+            quizWrapper.style.display = 'block';
+            displayName.innerText = studentName;
+            startQuiz();
+        });
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            resetState();
+            let currentQuestion = quizData[currentQuestionIndex];
+            let questionNo = currentQuestionIndex + 1;
+            progressText.innerText = `Soal ${questionNo}/${quizData.length}`;
+            questionText.innerText = currentQuestion.question;
+
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.innerText = option;
+                button.classList.add('option');
+                button.addEventListener('click', selectAnswer);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function resetState() {
+            nextBtn.style.visibility = 'hidden';
+            feedbackText.style.display = 'none';
+            while (optionsContainer.firstChild) {
+                optionsContainer.removeChild(optionsContainer.firstChild);
+            }
+        }
+        
+        function selectAnswer(e) {
+            const selectedBtn = e.target;
+            const isCorrect = selectedBtn.innerText === quizData[currentQuestionIndex].answer;
+            const rationale = quizData[currentQuestionIndex].rationale;
+            
+            if (isCorrect) {
+                selectedBtn.classList.add('correct');
+                score++;
+                feedbackText.innerHTML = `<strong>Benar!</strong> ${rationale}`;
+                feedbackText.className = 'correct-feedback';
+            } else {
+                selectedBtn.classList.add('incorrect');
+                feedbackText.innerHTML = `<strong>Salah.</strong> Jawaban yang benar adalah <strong>${quizData[currentQuestionIndex].answer}</strong>. <br> ${rationale}`;
+                feedbackText.className = 'incorrect-feedback';
+            }
+            
+            feedbackText.style.display = 'block';
+
+            Array.from(optionsContainer.children).forEach(button => {
+                if(button.innerText === quizData[currentQuestionIndex].answer){
+                    if(!isCorrect) button.classList.add('correct');
+                }
+                button.disabled = true;
+            });
+            
+            nextBtn.style.visibility = 'visible';
+        }
+        
+        function showScore(){
+            quizArea.innerHTML = "";
+            footer.innerHTML = "";
+            progressText.innerText = "Selesai!";
+            displayName.innerText = "Hasil Akhir";
+
+            const accuracy = Math.round((score / quizData.length) * 100);
+            
+            const scoreElement = document.createElement('div');
+            scoreElement.classList.add('score-container');
+            scoreElement.innerHTML = `
+                <h2>Ulangan Selesai, ${studentName}!</h2>
+                <p>Skor Anda: <strong>${score}</strong> dari <strong>${quizData.length}</strong> soal.</p>
+                <p>Akurasi Jawaban: <strong>${accuracy}%</strong></p>
+                <button id="restart-btn" onclick="location.reload()">Kerjakan Lagi</button>
+            `;
+            quizArea.appendChild(scoreElement);
+        }
+
+        function handleNextButton() {
+            currentQuestionIndex++;
+            if(currentQuestionIndex < quizData.length){
+                showQuestion();
+            } else {
+                showScore();
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if(currentQuestionIndex < quizData.length){
+                handleNextButton();
+            }
+        });
+
+    </script>
+</body>
+</html>
