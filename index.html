@@ -34,19 +34,8 @@
         }
         /* Sisa CSS lainnya sama persis seperti sebelumnya */
         .container { width: 100%; max-width: 700px; }
-       .name-entry-container, .quiz-container {
-    /* Mengubah warna solid menjadi transparan (putih dengan 85% opacity) */
-    background: rgba(255, 255, 255, 0.85);
-
-    /* EFEK KACA BURAM (FROSTED GLASS) - Opsional tapi sangat keren */
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-
-    /* Menambahkan sedikit border agar terlihat lebih tegas */
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 15px;
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-}
+       .name-entry-container, .quiz-container { background: rgba(255, 255, 255, 0.55); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+ border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 15px; box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1); }
         .name-entry-container { padding: 40px; text-align: center; }
         .quiz-container { overflow: hidden; }
         .name-entry-container h2 { margin-top: 0; color: var(--dark-color); font-size: 1.8em; }
@@ -170,4 +159,5 @@
     </script>
 </body>
 </html>
+
 
