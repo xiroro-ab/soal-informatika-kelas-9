@@ -32,9 +32,11 @@
             background: var(--white-color);
             border-radius: 15px;
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
         }
+        /* PERBAIKAN: overflow: hidden dihapus dari sini agar dropdown tidak terpotong */
         .name-entry-container { padding: 40px; text-align: center; }
+        .quiz-container { overflow: hidden; }
+
         .name-entry-container h2 { margin-top: 0; color: var(--dark-color); font-size: 1.8em; }
         .name-entry-container p { margin-bottom: 25px; }
         #student-name {
@@ -78,7 +80,6 @@
         .options {
             position: absolute;
             width: 100%;
-            padding: 10px;
             border-radius: 0 0 8px 8px;
             background: var(--white-color);
             border: 2px solid var(--primary-color);
@@ -90,7 +91,16 @@
             visibility: hidden;
             transform: translateY(-10px);
             transition: all 0.3s ease;
+            /* PERBAIKAN: Menambahkan max-height dan overflow-y untuk scrolling */
+            max-height: 220px; 
+            overflow-y: auto;
         }
+        /* --- Style untuk scrollbar (opsional, agar lebih keren) --- */
+        .options::-webkit-scrollbar { width: 8px; }
+        .options::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 25px; }
+        .options::-webkit-scrollbar-thumb { background: #ccc; border-radius: 25px; }
+        .options::-webkit-scrollbar-thumb:hover { background: #bbb; }
+
         .select-menu.active .options {
             opacity: 1;
             visibility: visible;
@@ -105,6 +115,7 @@
             transition: background-color 0.2s;
         }
         .option-item:hover { background-color: #f2f2f2; }
+        .option-item i { font-size: 20px; margin-right: 12px; color: #555; }
         .option-text { font-size: 1em; color: #333; }
         /* --- AKHIR STYLING DROPDOWN --- */
 
@@ -137,7 +148,6 @@
         .score-container { text-align: center; }
         .score-container h2 { font-size: 2.2em; color: var(--primary-color); }
         #restart-btn { background-color: var(--success-color); color: var(--white-color); padding: 15px 35px; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 600; cursor: pointer; margin-top: 20px; }
-        /* Sisa CSS lainnya yang relevan */
     </style>
 </head>
 <body>
@@ -153,10 +163,22 @@
                     <i class='bx bx-chevron-down'></i>
                 </div>
                 <ul class="options">
-                    <li class="option-item"><span class="option-text">Kelas 9A</span></li>
-                    <li class="option-item"><span class="option-text">Kelas 9B</span></li>
-                    <li class="option-item"><span class="option-text">Kelas 9C</span></li>
-                    <li class="option-item"><span class="option-text">Kelas 9D</span></li>
+                    <li class="option-item">
+                        <i class='bx bxs-school'></i>
+                        <span class="option-text">Kelas 9.1</span>
+                    </li>
+                    <li class="option-item">
+                        <i class='bx bxs-school'></i>
+                        <span class="option-text">Kelas 9.2</span>
+                    </li>
+                    <li class="option-item">
+                        <i class='bx bxs-school'></i>
+                        <span class="option-text">Kelas 9.3</span>
+                    </li>
+                    <li class="option-item">
+                        <i class='bx bxs-school'></i>
+                        <span class="option-text">Kelas 9.4</span>
+                    </li>
                 </ul>
             </div>
 
@@ -183,20 +205,16 @@
     </div>
 
     <script>
+        // ... JavaScript tidak perlu diubah sama sekali dari versi sebelumnya ...
         const quizData = [ /* ... data kuis tidak berubah ... */ 
             { question: "Dalam struktur data, kumpulan titik-titik (nodes) yang dihubungkan oleh garis-garis (edges) disebut sebagai...", options: ["Tree", "Graf", "Array", "List"], answer: "Graf", rationale: "Ini adalah definisi dasar dari sebuah Graf." }, { question: "Struktur data yang menggambarkan hubungan hierarkis, seperti silsilah keluarga, adalah contoh dari...", options: ["Graf", "Linked List", "Tree", "Stack"], answer: "Tree", rationale: "Tree digunakan untuk data hierarkis." }, { question: "Dalam struktur data Tree, node yang tidak memiliki 'anak' disebut...", options: ["Root (Akar)", "Parent (Induk)", "Branch (Cabang)", "Leaf (Daun)"], answer: "Leaf (Daun)", rationale: "Leaf adalah node di ujung cabang." }, { question: "Syarat: \"Membawa kartu pelajar DAN memakai seragam.\" Jika Budi hanya memakai seragam, apa hasilnya?", options: ["Boleh masuk", "Tidak boleh masuk", "Boleh masuk jika diizinkan", "Informasi tidak cukup"], answer: "Tidak boleh masuk", rationale: "Logika AND mengharuskan semua kondisi benar." }, { question: "Peta jaringan kereta api paling tepat direpresentasikan dengan struktur data...", options: ["Graf", "Tree", "Array", "Queue"], answer: "Graf", rationale: "Graf cocok untuk jaringan non-hierarkis." }, { question: "Ciri khas utama dari struktur data Tree adalah...", options: ["Memiliki banyak siklus", "Setiap node bisa punya banyak 'induk'", "Punya simpul awal", "Tidak memiliki siklus (jalur melingkar)"], answer: "Tidak memiliki siklus (jalur melingkar)", rationale: "Tree adalah graf tanpa siklus." }, { question: "Ekspresi: \"(Hari Minggu) AND (Libur sekolah)\". Agar bernilai BENAR, maka...", options: ["Cukup hari Minggu.", "Harus hari Minggu DAN libur sekolah.", "Cukup libur sekolah.", "Salah satu saja cukup."], answer: "Harus hari Minggu DAN libur sekolah.", rationale: "Logika AND mengharuskan kedua kondisi terpenuhi." }, { question: "Pertemanan di media sosial paling sesuai direpresentasikan sebagai...", options: ["Tree", "Graf", "Stack", "Array"], answer: "Graf", rationale: "Jaringan sosial adalah contoh klasik dari Graf." }, { question: "Sistem login memeriksa: \"(Username benar) AND (Password benar)\". Jika username salah tapi password benar, apa yang terjadi?", options: ["Login berhasil", "Login gagal", "Minta username lagi", "Sistem terkunci"], answer: "Login gagal", rationale: "Satu kondisi salah membuat hasil AND menjadi salah." }, { question: "Node paling atas dalam sebuah struktur data Tree disebut...", options: ["Leaf (Daun)", "Child (Anak)", "Root (Akar)", "Edge (Sisi)"], answer: "Root (Akar)", rationale: "Root adalah titik awal atau puncak dari Tree." }
         ];
-
         let studentName = "", studentClass = "";
         let currentQuestionIndex = 0, score = 0;
-
-        // --- ELEMEN BARU UNTUK DROPDOWN KUSTOM ---
         const selectMenu = document.querySelector(".select-menu");
         const selectBtn = selectMenu.querySelector(".select-btn");
         const options = selectMenu.querySelectorAll(".option-item");
         const sBtn_text = selectMenu.querySelector(".sBtn-text");
-
-        // --- ELEMEN YANG SUDAH ADA ---
         const studentNameInput = document.getElementById('student-name');
         const startBtn = document.getElementById('start-btn');
         const nameEntryContainer = document.getElementById('name-entry');
@@ -209,54 +227,43 @@
         const nextBtn = document.getElementById('next-btn');
         const quizArea = document.getElementById('quiz-area');
         const footer = document.querySelector('.footer');
-
-        // --- LOGIKA UNTUK DROPDOWN KUSTOM ---
         selectBtn.addEventListener("click", () => selectMenu.classList.toggle("active"));
         options.forEach(option => {
             option.addEventListener("click", () => {
                 let selectedOption = option.querySelector(".option-text").innerText;
                 sBtn_text.innerText = selectedOption;
                 sBtn_text.classList.add("selected");
-                studentClass = selectedOption; // Menyimpan nilai kelas yang dipilih
+                studentClass = selectedOption; 
                 selectMenu.classList.remove("active");
             });
         });
-
         startBtn.addEventListener('click', () => {
             studentName = studentNameInput.value.trim();
             if (studentName === "" || studentClass === "") {
                 alert("Harap isi nama dan pilih kelas Anda!");
                 return;
             }
-            
-            // Untuk debugging, Anda bisa hapus tanda // di baris bawah ini
-            // alert(`DEBUG: Nama = ${studentName}, Kelas yang akan dikirim = ${studentClass}`);
-            
             nameEntryContainer.style.display = 'none';
             quizWrapper.style.display = 'block';
             displayName.innerText = `${studentName} (${studentClass})`;
             startQuiz();
         });
-
         async function showScore() {
             quizArea.innerHTML = "";
             footer.innerHTML = "";
             progressText.innerText = "Selesai!";
             displayName.innerText = "Hasil Akhir";
             const accuracy = Math.round((score / quizData.length) * 100);
-
             const scoreElement = document.createElement('div');
             scoreElement.classList.add('score-container');
             scoreElement.innerHTML = `<h2>Ulangan Selesai, ${studentName}!</h2><p>Skor Anda: <strong>${score}</strong> dari <strong>${quizData.length}</strong> soal.</p><p>Akurasi Jawaban: <strong>${accuracy}%</strong></p><p id="save-status">Menyimpan hasil...</p><button id="restart-btn" onclick="location.reload()">Kerjakan Lagi</button>`;
             quizArea.appendChild(scoreElement);
-            
             const scriptURL = 'https://script.google.com/macros/s/AKfycbyBEfA0yCWP0r9ZExlIsVcYI8OMqq0iznDbHT3GJ5mcX_XIiJbJQfURWNXD-uaAZwaglA/exec';
             const dataToSend = {
                 nama: studentName,
                 skor: score,
                 kelas: studentClass
             };
-
             try {
                 await fetch(scriptURL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(dataToSend) });
                 document.getElementById('save-status').innerText = 'Hasil berhasil disimpan! ✅';
@@ -265,15 +272,12 @@
                 document.getElementById('save-status').innerText = 'Gagal menyimpan hasil. ❌';
             }
         }
-        
-        // --- Sisa fungsi (startQuiz, showQuestion, dll) tidak ada perubahan ---
         function startQuiz() { currentQuestionIndex = 0; score = 0; showQuestion(); }
         function showQuestion() { resetState(); let currentQuestion = quizData[currentQuestionIndex]; let questionNo = currentQuestionIndex + 1; progressText.innerText = `Soal ${questionNo}/${quizData.length}`; questionText.innerText = currentQuestion.question; currentQuestion.options.forEach(optionText => { const button = document.createElement('button'); button.innerText = optionText; button.classList.add('option'); button.addEventListener('click', selectAnswer); optionsContainer.appendChild(button); }); }
         function resetState() { nextBtn.style.visibility = 'hidden'; feedbackText.style.display = 'none'; while (optionsContainer.firstChild) { optionsContainer.removeChild(optionsContainer.firstChild); } }
         function selectAnswer(e) { const selectedBtn = e.target; const isCorrect = selectedBtn.innerText === quizData[currentQuestionIndex].answer; const rationale = quizData[currentQuestionIndex].rationale; if (isCorrect) { selectedBtn.classList.add('correct'); score++; feedbackText.innerHTML = `<strong>Benar!</strong> ${rationale}`; feedbackText.className = 'correct-feedback'; } else { selectedBtn.classList.add('incorrect'); feedbackText.innerHTML = `<strong>Salah.</strong> Jawaban yang benar adalah <strong>${quizData[currentQuestionIndex].answer}</strong>. <br> ${rationale}`; feedbackText.className = 'incorrect-feedback'; } feedbackText.style.display = 'block'; Array.from(optionsContainer.children).forEach(button => { if(button.innerText === quizData[currentQuestionIndex].answer){ if(!isCorrect) button.classList.add('correct'); } button.disabled = true; }); nextBtn.style.visibility = 'visible'; }
         function handleNextButton() { currentQuestionIndex++; if(currentQuestionIndex < quizData.length){ showQuestion(); } else { showScore(); } }
         nextBtn.addEventListener('click', () => { if(currentQuestionIndex < quizData.length){ handleNextButton(); } });
-
     </script>
 </body>
 </html>
