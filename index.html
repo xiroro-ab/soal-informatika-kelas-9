@@ -241,24 +241,53 @@
             nextBtn.style.visibility = 'visible';
         }
         
-        function showScore(){
-            quizArea.innerHTML = "";
-            footer.innerHTML = "";
-            progressText.innerText = "Selesai!";
-            displayName.innerText = "Hasil Akhir";
+// Ganti fungsi showScore() yang lama dengan yang ini
 
-            const accuracy = Math.round((score / quizData.length) * 100);
-            
-            const scoreElement = document.createElement('div');
-            scoreElement.classList.add('score-container');
-            scoreElement.innerHTML = `
-                <h2>Ulangan Selesai, ${studentName}!</h2>
-                <p>Skor Anda: <strong>${score}</strong> dari <strong>${quizData.length}</strong> soal.</p>
-                <p>Akurasi Jawaban: <strong>${accuracy}%</strong></p>
-                <button id="restart-btn" onclick="location.reload()">Kerjakan Lagi</button>
-            `;
-            quizArea.appendChild(scoreElement);
-        }
+async function showScore(){
+    quizArea.innerHTML = "";
+    footer.innerHTML = "";
+    progressText.innerText = "Selesai!";
+    displayName.innerText = "Hasil Akhir";
+    const accuracy = Math.round((score / quizData.length) * 100);
+
+    // Tampilkan hasil di layar
+    const scoreElement = document.createElement('div');
+    scoreElement.classList.add('score-container');
+    scoreElement.innerHTML = `
+        <h2>Ulangan Selesai, ${studentName}!</h2>
+        <p>Skor Anda: <strong>${score}</strong> dari <strong>${quizData.length}</strong> soal.</p>
+        <p>Akurasi Jawaban: <strong>${accuracy}%</strong></p>
+        <p id="save-status">Menyimpan hasil...</p>
+        <button id="restart-btn" onclick="location.reload()">Kerjakan Lagi</button>
+    `;
+    quizArea.appendChild(scoreElement);
+    
+    // ===============================================================================
+    // BAGIAN BARU: Kirim data ke Google Apps Script
+    // ===============================================================================
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyaA7vz61oqX68QtB6g1CC9tMM7DYhqJEacwvQGtCcL1uQYxrkCkIGqXe471XmwnPPpgg/exec'; // Ganti dengan URL Anda
+    const dataToSend = {
+        nama: studentName,
+        skor: score
+    };
+
+    try {
+        const response = await fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors', // Penting untuk menghindari error CORS saat mengirim ke Apps Script
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataToSend)
+        });
+        // Karena mode 'no-cors', kita tidak bisa membaca balasan, tapi data tetap terkirim.
+        document.getElementById('save-status').innerText = 'Hasil berhasil disimpan! ✅';
+
+    } catch (error) {
+        console.error("Error sending data: ", error);
+        document.getElementById('save-status').innerText = 'Gagal menyimpan hasil. ❌';
+    }
+}
 
         function handleNextButton() {
             currentQuestionIndex++;
@@ -278,3 +307,4 @@
     </script>
 </body>
 </html>
+
